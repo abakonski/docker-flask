@@ -1,0 +1,7 @@
+# Microframework for Python
+# http://flask.pocoo.org/
+Flask==0.12.2
+
+# WSGI for Python
+# http://uwsgi-docs.readthedocs.io/en/latest/index.html
+uWSGI==2.0.15
