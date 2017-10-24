@@ -9,7 +9,6 @@ RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC64107
     && echo "deb-src http://httpredir.debian.org/debian/ stretch main contrib non-free" >> /etc/apt/sources.list \
     && apt-get update -y \
     && apt-get install -y -t stretch openssl nginx-extras=${NGINX_VERSION} \
-    && apt-get install -y ca-certificates gettext-base \
     && apt-get install -y nano supervisor \
     && rm -rf /var/lib/apt/lists/*
 
@@ -30,18 +29,18 @@ RUN rm -f /etc/nginx/conf.d/default.conf \
     && rm -rf /etc/nginx/sites-enabled/*
 
 # Copy the modified Nginx conf
-COPY conf/nginx.conf /etc/nginx/conf.d/
+COPY /conf/nginx.conf /etc/nginx/conf.d/
 
 # Custom Supervisord config
-COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY /conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # COPY requirements.txt and RUN pip install BEFORE adding the rest of your code, this will cause Docker's caching mechanism
 # to prevent re-installinig (all your) dependencies when you change a line or two in your app
-COPY app/requirements.txt /home/docker/code/app/
+COPY /app/requirements.txt /home/docker/code/app/
 RUN pip3 install -r /home/docker/code/app/requirements.txt
 
 # Copy app code to image
-COPY ./app /app
+COPY /app /app
 WORKDIR /app
 
 # Copy the base uWSGI ini file to enable default dynamic uwsgi process number
